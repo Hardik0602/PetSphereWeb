@@ -35,8 +35,8 @@ function App() {
       <Navbar />
       <main style={{ fontFamily: 'sans-serif', background: '#f8fafc', minHeight: '80vh' }}>
         {/* Animated Banner Carousel */}
-        <section style={{ width: '100vw', maxWidth: '100%', overflow: 'hidden', background: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, marginBottom: '2rem', position: 'relative', aspectRatio: '16/9', minHeight: 0, height: 'clamp(220px, 36vw, 600px)' }}>
-          <div style={{ width: '100vw', maxWidth: '1280px', margin: '0 auto', height: '100%', position: 'relative', aspectRatio: '16/9', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <section style={{ width: '100vw', overflow: 'hidden', background: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, marginBottom: '2rem', position: 'relative', aspectRatio: '16/6', minHeight: 0, height: 'clamp(220px, 36vw, 600px)' }}>
+          <div style={{ width: '100vw', height: '100%', position: 'relative', aspectRatio: '16/6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {banners.map((img, idx) => (
               <img
                 key={idx}
@@ -44,14 +44,11 @@ function App() {
                 alt={`Banner ${idx + 1}`}
                 style={{
                   position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: `translate(-50%, -50%)${animating && idx === current ? ' scale(1) rotate(-1deg)' : ''}`,
-                  width: '100%',
+                  top: 0,
+                  left: 0,
+                  width: '100vw',
                   height: '100%',
-                  maxWidth: '1280px',
-                  maxHeight: '719px',
-                  objectFit: 'contain',
+                  objectFit: 'cover',
                   objectPosition: 'center',
                   borderRadius: 0,
                   opacity: idx === current ? 1 : 0,
