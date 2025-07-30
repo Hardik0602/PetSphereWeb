@@ -44,9 +44,10 @@ function App() {
                 alt={`Banner ${idx + 1}`}
                 style={{
                   position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100vw',
+                  top: '50%',
+                  left: '50%',
+                  transform: `translate(-50%, -50%)${animating && idx === current ? ' scale(1) rotate(-1deg)' : ''}`,
+                  width: '100%',
                   height: '100%',
                   objectFit: 'cover',
                   objectPosition: 'center',
@@ -209,7 +210,7 @@ function App() {
           <a href="#privacy" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Privacy Policy</a>
           <a href="#contact" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Contact Us</a>
         </div>
-        <div style={{ fontSize: '0.95rem', color: '#bbb' }}>
+        <div style={{ fontSize: '1rem', color: '#bbb' }}>
           &copy; {new Date().getFullYear()} PetSphere. All rights reserved.
         </div>
       </footer>
