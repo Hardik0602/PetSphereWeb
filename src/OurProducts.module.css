@@ -1,0 +1,217 @@
+.ourProductsSection {
+  width: 100vw;
+  position: relative;
+  background: linear-gradient(135deg, #e0f7fa 0%, #f8fafc 60%, #fce4ec 100%);
+  overflow: hidden;
+  padding: 2.5rem 0 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Animated SVG blobs for background */
+/* Multiple, vibrant, lively animated blobs */
+.ourProductsSection::before,
+.ourProductsSection::after,
+.ourProductsSection::backdrop1,
+.ourProductsSection::backdrop2 {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  opacity: 0.55;
+  filter: blur(18px);
+  pointer-events: none;
+}
+.ourProductsSection::before {
+  width: 420px;
+  height: 420px;
+  left: -120px;
+  top: -100px;
+  background: radial-gradient(circle at 30% 30%, #4fd1c5 70%, #e0f7fa 100%);
+  animation: blobMove1 10s ease-in-out infinite alternate;
+}
+.ourProductsSection::after {
+  width: 340px;
+  height: 340px;
+  right: -100px;
+  bottom: -80px;
+  background: radial-gradient(circle at 70% 70%, #f06292 70%, #fce4ec 100%);
+  animation: blobMove2 12s ease-in-out infinite alternate;
+}
+.ourProductsSection::backdrop1 {
+  width: 260px;
+  height: 260px;
+  left: 50%;
+  top: 10%;
+  background: radial-gradient(circle at 60% 40%, #ffd600 70%, #fffde7 100%);
+  animation: blobMove3 8s ease-in-out infinite alternate;
+}
+.ourProductsSection::backdrop2 {
+  width: 200px;
+  height: 200px;
+  right: 30%;
+  top: 60%;
+  background: radial-gradient(circle at 40% 60%, #1976d2 70%, #e3f2fd 100%);
+  animation: blobMove4 9s ease-in-out infinite alternate;
+}
+
+/* Add the extra blobs using pseudo-elements on a child element */
+.ourProductsSection .ourProductsBlobs {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.ourProductsSection .ourProductsBlobs::before {
+  content: '';
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  left: 50%;
+  top: 10%;
+  border-radius: 50%;
+  opacity: 0.45;
+  filter: blur(18px);
+  background: radial-gradient(circle at 60% 40%, #ffd600 70%, #fffde7 100%);
+  animation: blobMove3 8s ease-in-out infinite alternate;
+}
+.ourProductsSection .ourProductsBlobs::after {
+  content: '';
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  right: 30%;
+  top: 60%;
+  border-radius: 50%;
+  opacity: 0.45;
+  filter: blur(18px);
+  background: radial-gradient(circle at 40% 60%, #1976d2 70%, #e3f2fd 100%);
+  animation: blobMove4 9s ease-in-out infinite alternate;
+}
+
+@keyframes blobMove1 {
+  0% { transform: scale(1) translateY(0px) translateX(0px); }
+  30% { transform: scale(1.12, 0.93) translateY(40px) translateX(30px); }
+  60% { transform: scale(0.91, 1.09) translateY(-30px) translateX(-40px); }
+  100% { transform: scale(1.08) translateY(20px) translateX(10px); }
+}
+@keyframes blobMove2 {
+  0% { transform: scale(1) translateY(0px) translateX(0px); }
+  40% { transform: scale(1.09, 1.05) translateY(-30px) translateX(40px); }
+  70% { transform: scale(1.04, 0.92) translateY(30px) translateX(-30px); }
+  100% { transform: scale(1.12) translateY(-10px) translateX(20px); }
+}
+@keyframes blobMove3 {
+  0% { transform: scale(1) translateY(0px) translateX(0px); }
+  50% { transform: scale(1.15, 0.85) translateY(30px) translateX(-20px); }
+  100% { transform: scale(0.9, 1.1) translateY(-20px) translateX(30px); }
+}
+@keyframes blobMove4 {
+  0% { transform: scale(1) translateY(0px) translateX(0px); }
+  40% { transform: scale(1.08, 1.12) translateY(-20px) translateX(20px); }
+  80% { transform: scale(0.95, 1.05) translateY(20px) translateX(-20px); }
+  100% { transform: scale(1.1) translateY(10px) translateX(10px); }
+}
+
+@keyframes blobMove {
+  0% {
+    transform: scale(1) translateY(0px) translateX(0px);
+  }
+  40% {
+    transform: scale(1.08, 0.95) translateY(30px) translateX(20px);
+  }
+  70% {
+    transform: scale(0.93, 1.07) translateY(-20px) translateX(-30px);
+  }
+  100% {
+    transform: scale(1.04) translateY(10px) translateX(10px);
+  }
+}
+.ourProductsTitle {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 3;
+}
+.ourProductsRow {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0.5rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  position: relative;
+  z-index: 3;
+}
+.ourProductCard {
+  background: #f8fafc;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 1rem;
+  width: 22vw;
+  max-width: 200px;
+  min-width: 140px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 0 0 22vw;
+}
+.ourProductImageWrap {
+  position: relative;
+  width: 100%;
+}
+.ourProductImage {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  max-width: 100%;
+}
+.ourProductWishlist {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255,255,255,0.9);
+  border: 1.5px solid #4fd1c5;
+  color: #4fd1c5;
+  border-radius: 50%;
+  padding: 0.4rem 0.5rem;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 2;
+}
+.ourProductName {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+.ourProductPrice {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+}
+.ourProductCartWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.ourProductCartBtn {
+  background: #4fd1c5;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 15px;
+  cursor: pointer;
+}

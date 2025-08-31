@@ -1,17 +1,122 @@
-
-
+// Features/Icons array for quality, support, trust, delivery
+const features = [
+  {
+    icon: (
+      // Green Tick for Quality Assurance
+      <svg width="44" height="44" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#e8f5e9" stroke="#43a047" strokeWidth="2"/><path d="M16 24l6 6 10-12" stroke="#43a047" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    ),
+    label: 'Quality Assurance',
+  },
+  {
+    icon: (
+      // Round Clock for 24/7 Support
+      <svg width="44" height="44" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="20" fill="#fffde7" stroke="#ffd600" strokeWidth="2"/><circle cx="24" cy="24" r="16" fill="#fffde7" stroke="#ffd600" strokeWidth="1.5"/><path d="M24 14v10l7 4" stroke="#ff9800" strokeWidth="3" strokeLinecap="round"/><circle cx="24" cy="24" r="2.5" fill="#ffd600"/></svg>
+    ),
+    label: '24/7 Support',
+  },
+  {
+    icon: (
+      // Handshake for Trusted Service
+      <svg width="44" height="44" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="24" fill="#e3f2fd"/><path d="M14 28l6 6c1.5 1.5 4 1.5 5.5 0l8-8c1.5-1.5 1.5-4 0-5.5l-2-2c-1.5-1.5-4-1.5-5.5 0l-8 8c-1.5 1.5-1.5 4 0 5.5z" fill="#90caf9" stroke="#1976d2" strokeWidth="2"/><path d="M20 34l-6-6" stroke="#1976d2" strokeWidth="2" strokeLinecap="round"/><path d="M34 20l-6-6" stroke="#1976d2" strokeWidth="2" strokeLinecap="round"/></svg>
+    ),
+    label: 'Trusted Service',
+  },
+  {
+    icon: (
+      // Truck for Fast Delivery
+      <svg width="44" height="44" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="24" fill="#e1f5fe"/><rect x="10" y="22" width="18" height="10" rx="3" fill="#4fc3f7" stroke="#0288d1" strokeWidth="2"/><rect x="28" y="26" width="10" height="6" rx="2" fill="#b3e5fc" stroke="#0288d1" strokeWidth="2"/><circle cx="16" cy="34" r="3" fill="#0288d1"/><circle cx="34" cy="34" r="3" fill="#0288d1"/></svg>
+    ),
+    label: 'Fast Delivery',
+  },
+];
 import React, { useState, useEffect, useRef } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
 import Navbar from './Navbar';
+import BestSellers from './BestSellers';
+import CartPage from './CartPage';
+import WishlistPage from './WishlistPage';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// Simple SVG icons for quality, support, trust, delivery
 import banner1 from './assets/banner_1.jpeg';
 import banner2 from './assets/banner_2.jpeg';
 import banner3 from './assets/banner_3.jpeg';
+import './App.css';
 
+import { CartWishlistProvider, useCartWishlist } from './CartWishlistContext';
+import ourProductsStyles from './OurProducts.module.css';
+
+function OurProducts() {
+  const { cart, wishlist, addToCart, addToWishlist, removeFromWishlist } = useCartWishlist();
+  // Product data for Our Products section
+  const products = [
+    {
+      name: 'Fun Dog Toy',
+      price: 9.99,
+      image: 'https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=400&q=80',
+    },
+    {
+      name: 'Cat Scratcher',
+      price: 12.99,
+      image: 'https://images.unsplash.com/photo-1518715308788-3005759c41c8?auto=format&fit=crop&w=400&q=80',
+    },
+    {
+      name: 'Pet Shampoo',
+      price: 7.99,
+      image: 'https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=400&q=80',
+    },
+  ];
+
+  const isInWishlist = (product) => wishlist.some(item => item.name === product.name);
+  const isInCart = (product) => cart.some(item => item.name === product.name);
+
+  return (
+    <section className={ourProductsStyles.ourProductsSection}>
+      {/* Extra animated blobs for lively background */}
+      <div className="ourProductsBlobs" />
+      <h2 className={ourProductsStyles.ourProductsTitle}>Our Products</h2>
+      <div className={ourProductsStyles.ourProductsRow}>
+        {products.map((product, idx) => (
+          <div className={ourProductsStyles.ourProductCard} key={product.name}>
+            <div className={ourProductsStyles.ourProductImageWrap}>
+              <img src={product.image} alt={product.name} className={ourProductsStyles.ourProductImage} />
+              <button
+                className={ourProductsStyles.ourProductWishlist}
+                title={isInWishlist(product) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                style={{ color: isInWishlist(product) ? 'red' : '#aaa', fontSize: 22, transition: 'color 0.2s' }}
+                onClick={() => {
+                  if (isInWishlist(product)) {
+                    removeFromWishlist(product);
+                  } else {
+                    addToWishlist(product);
+                  }
+                }}
+              >
+                {isInWishlist(product) ? '❤️' : '🤍'}
+              </button>
+            </div>
+            <h3 className={ourProductsStyles.ourProductName}>{product.name}</h3>
+            <p className={ourProductsStyles.ourProductPrice}>${product.price.toFixed(2)}</p>
+            <div className={ourProductsStyles.ourProductCartWrap}>
+              <button
+                className={ourProductsStyles.ourProductCartBtn}
+                style={{ background: isInCart(product) ? '#4fd1c5' : undefined, color: isInCart(product) ? '#fff' : undefined, cursor: isInCart(product) ? 'not-allowed' : 'pointer', transition: 'background 0.2s' }}
+                disabled={isInCart(product)}
+                onClick={() => {
+                  if (!isInCart(product)) {
+                    addToCart(product);
+                  }
+                }}
+              >
+                {isInCart(product) ? 'Added' : 'Add to Cart'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 function App() {
-  const [count, setCount] = useState(0);
   const banners = [banner1, banner2, banner3];
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
@@ -28,194 +133,112 @@ function App() {
     }, 3500);
     return () => clearTimeout(timeoutRef.current);
   }, [current, banners.length]);
-
-  // Full-width, animated banner carousel
   return (
-    <>
-      <Navbar />
-      <main style={{ fontFamily: 'sans-serif', background: '#f8fafc', minHeight: '80vh' }}>
-        {/* Animated Banner Carousel */}
-        <section style={{ width: '100vw', overflow: 'hidden', background: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, marginBottom: '2rem', position: 'relative', aspectRatio: '16/6', minHeight: 0, height: 'clamp(220px, 36vw, 600px)' }}>
-          <div style={{ width: '100vw', height: '100%', position: 'relative', aspectRatio: '16/6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {banners.map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`Banner ${idx + 1}`}
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: `translate(-50%, -50%)${animating && idx === current ? ' scale(1) rotate(-1deg)' : ''}`,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                  borderRadius: 0,
-                  opacity: idx === current ? 1 : 0,
-                  zIndex: idx === current ? 2 : 1,
-                  transition: 'opacity 0.5s cubic-bezier(.4,2,.6,1), transform 0.5s cubic-bezier(.4,2,.6,1)',
-                  filter: idx === current ? 'drop-shadow(0 4px 24px #0002)' : 'none',
-                  background: '#fff',
-                }}
-              />
-            ))}
-            {/* Dots */}
-            <div style={{ position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 10, zIndex: 10 }}>
-              {banners.map((_, idx) => (
-                <span key={idx} style={{ width: 12, height: 12, borderRadius: '50%', background: idx === current ? '#4fd1c5' : '#ddd', display: 'inline-block', boxShadow: idx === current ? '0 2px 8px #4fd1c555' : 'none', transition: 'background 0.3s' }} />
-              ))}
-            </div>
-          </div>
-        </section>
-        {/* Hero Section */}
-        <section style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '3rem 1rem 2rem 1rem', background: '#fff' }}>
-          <h1 style={{ fontSize: '2.5rem', color: '#4fd1c5', marginBottom: '1rem', fontWeight: 700 }}>Everything Your Pet Needs</h1>
-          <p style={{ fontSize: '1.2rem', color: '#333', maxWidth: 600, textAlign: 'center' }}>
-            Shop food, toys, accessories, and book services for your furry, feathery, or scaly friends!
-          </p>
-          <button style={{ background: '#4fd1c5', color: '#fff', border: 'none', borderRadius: 6, padding: '0.7rem 2rem', marginTop: 24, fontSize: '1.1rem', cursor: 'pointer' }}>Shop Now</button>
-        </section>
+      <CartWishlistProvider>
+        <Router>
+          <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <Navbar />
+            <div style={{ flex: 1, marginTop: 80, marginBottom: 90 }}>
+              <Routes>
+                <Route path="/" element={
+                  <main style={{ fontFamily: 'sans-serif', background: '#f8fafc', minHeight: '80vh' }}>
+                    {/* Banner Carousel */}
+                    <section style={{ width: '100vw', overflow: 'hidden', background: '#fff', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0, marginBottom: '2rem', position: 'relative', aspectRatio: '16/6', minHeight: 0, height: 'clamp(220px, 36vw, 600px)' }}>
+                      <div style={{ width: '100vw', height: '100%', position: 'relative', aspectRatio: '16/6', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {banners.map((img, idx) => (
+                          <img
+                            key={idx}
+                            src={img}
+                            alt={`Banner ${idx + 1}`}
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              width: '100vw',
+                              height: '100%',
+                              objectFit: 'cover',
+                              objectPosition: 'center',
+                              borderRadius: 0,
+                              opacity: idx === current ? 1 : 0,
+                              zIndex: idx === current ? 2 : 1,
+                              transition: 'opacity 0.5s cubic-bezier(.4,2,.6,1), transform 0.5s cubic-bezier(.4,2,.6,1)',
+                              filter: idx === current ? 'drop-shadow(0 4px 24px #0002)' : 'none',
+                              background: '#fff',
+                            }}
+                          />
+                        ))}
+                        {/* Dots */}
+                        <div style={{ position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 10, zIndex: 10 }}>
+                          {banners.map((_, idx) => (
+                            <span key={idx} style={{ width: 12, height: 12, borderRadius: '50%', background: idx === current ? '#4fd1c5' : '#ddd', display: 'inline-block', boxShadow: idx === current ? '0 2px 8px #4fd1c555' : 'none', transition: 'background 0.3s' }} />
+                          ))}
+                        </div>
+                      </div>
+                    </section>
 
-        {/* Promotions */}
-        <section style={{ display: 'flex', justifyContent: 'center', gap: '2rem', padding: '1.5rem 1rem 0 1rem', background: '#f0fdfa' }}>
-          <div style={{ background: '#fff', borderRadius: 10, boxShadow: '0 2px 8px #0001', padding: '1rem 2rem', fontWeight: 500, color: '#4fd1c5' }}>10% Off on First Order!</div>
-          <div style={{ background: '#fff', borderRadius: 10, boxShadow: '0 2px 8px #0001', padding: '1rem 2rem', fontWeight: 500, color: '#4fd1c5' }}>Free Shipping Over $49</div>
-        </section>
+                    {/* Category Section */}
+                    <section style={{ width: '100vw', background: '#f8fafc', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '1.5rem 0', margin: 0 }}>
+                      <div style={{ display: 'flex', gap: '2.5rem', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: 1200 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
+                          <span role="img" aria-label="Dog" style={{ fontSize: 40, marginBottom: 8 }}>🐶</span>
+                          <span style={{ fontWeight: 500, color: '#333' }}>Dog</span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
+                          <span role="img" aria-label="Cat" style={{ fontSize: 40, marginBottom: 8 }}>🐱</span>
+                          <span style={{ fontWeight: 500, color: '#333' }}>Cat</span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
+                          <span role="img" aria-label="Fish" style={{ fontSize: 40, marginBottom: 8 }}>🐠</span>
+                          <span style={{ fontWeight: 500, color: '#333' }}>Fish</span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
+                          <span role="img" aria-label="Bird" style={{ fontSize: 40, marginBottom: 8 }}>🐦</span>
+                          <span style={{ fontWeight: 500, color: '#333' }}>Bird</span>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
+                          <span role="img" aria-label="Other" style={{ fontSize: 40, marginBottom: 8 }}>🦎</span>
+                          <span style={{ fontWeight: 500, color: '#333' }}>Other</span>
+                        </div>
+                      </div>
+                    </section>
 
-        {/* Shop by Pet */}
-        <section style={{ padding: '2rem 1rem 1rem 1rem', maxWidth: 1100, margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.7rem', color: '#333', marginBottom: '1.2rem', textAlign: 'center' }}>Shop by Pet</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 120 }}><span role="img" aria-label="Dog" style={{ fontSize: 32 }}>🐶</span><div>Dog</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 120 }}><span role="img" aria-label="Cat" style={{ fontSize: 32 }}>🐱</span><div>Cat</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 120 }}><span role="img" aria-label="Bird" style={{ fontSize: 32 }}>🐦</span><div>Bird</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 120 }}><span role="img" aria-label="Fish" style={{ fontSize: 32 }}>🐠</span><div>Fish</div></div>
-          </div>
-        </section>
+                    {/* Best Sellers Section */}
+                    <BestSellers />
 
-        {/* Featured Products */}
-        <section style={{ padding: '2rem 1rem', maxWidth: 1100, margin: '0 auto' }}>
-          <h2 style={{ fontSize: '2rem', color: '#333', marginBottom: '1.5rem', textAlign: 'center' }}>Featured Products</h2>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', justifyContent: 'center' }}>
-            {/* Example Product Cards */}
-            <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: '1.5rem', width: 250, textAlign: 'center' }}>
-              <img src="https://images.unsplash.com/photo-1518717758536-85ae29035b6d?auto=format&fit=crop&w=400&q=80" alt="Dog Food" style={{ width: '100%', borderRadius: 8, marginBottom: 12 }} />
-              <h3 style={{ fontSize: '1.1rem', margin: '0.5rem 0' }}>Premium Dog Food</h3>
-              <p style={{ color: '#666', fontSize: '0.95rem' }}>$24.99</p>
-              <button style={{ background: '#4fd1c5', color: '#fff', border: 'none', borderRadius: 6, padding: '0.5rem 1.2rem', marginTop: 8, cursor: 'pointer' }}>Add to Cart</button>
-            </div>
-            <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: '1.5rem', width: 250, textAlign: 'center' }}>
-              <img src="https://images.unsplash.com/photo-1518715308788-3005759c41c8?auto=format&fit=crop&w=400&q=80" alt="Cat Toy" style={{ width: '100%', borderRadius: 8, marginBottom: 12 }} />
-              <h3 style={{ fontSize: '1.1rem', margin: '0.5rem 0' }}>Interactive Cat Toy</h3>
-              <p style={{ color: '#666', fontSize: '0.95rem' }}>$14.99</p>
-              <button style={{ background: '#4fd1c5', color: '#fff', border: 'none', borderRadius: 6, padding: '0.5rem 1.2rem', marginTop: 8, cursor: 'pointer' }}>Add to Cart</button>
-            </div>
-            <div style={{ background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: '1.5rem', width: 250, textAlign: 'center' }}>
-              <img src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=400&q=80" alt="Pet Bed" style={{ width: '100%', borderRadius: 8, marginBottom: 12 }} />
-              <h3 style={{ fontSize: '1.1rem', margin: '0.5rem 0' }}>Cozy Pet Bed</h3>
-              <p style={{ color: '#666', fontSize: '0.95rem' }}>$39.99</p>
-              <button style={{ background: '#4fd1c5', color: '#fff', border: 'none', borderRadius: 6, padding: '0.5rem 1.2rem', marginTop: 8, cursor: 'pointer' }}>Add to Cart</button>
-            </div>
-          </div>
-        </section>
+                    {/* Our Products Section */}
+                    <OurProducts />
 
-        {/* Services */}
-        <section style={{ padding: '2rem 1rem', maxWidth: 1100, margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.7rem', color: '#333', marginBottom: '1.2rem', textAlign: 'center' }}>Our Services</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Vet" style={{ fontSize: 32 }}>🩺</span><div>Vet Consultation</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Grooming" style={{ fontSize: 32 }}>✂️</span><div>Grooming</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Training" style={{ fontSize: 32 }}>🏅</span><div>Training</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Boarding" style={{ fontSize: 32 }}>🏠</span><div>Boarding</div></div>
-          </div>
-        </section>
-
-        {/* Why Choose Us */}
-        <section style={{ padding: '2rem 1rem', maxWidth: 1100, margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.7rem', color: '#333', marginBottom: '1.2rem', textAlign: 'center' }}>Why Choose Us?</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Trust" style={{ fontSize: 32 }}>👍</span><div>Trusted by Pet Owners</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Delivery" style={{ fontSize: 32 }}>🚚</span><div>Fast Delivery</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Quality" style={{ fontSize: 32 }}>🏆</span><div>Quality Products</div></div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', textAlign: 'center', minWidth: 180 }}><span role="img" aria-label="Support" style={{ fontSize: 32 }}>💬</span><div>24/7 Support</div></div>
-          </div>
-        </section>
-
-        {/* Customer Reviews */}
-        <section style={{ padding: '2rem 1rem', maxWidth: 1100, margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.7rem', color: '#333', marginBottom: '1.2rem', textAlign: 'center' }}>What Our Customers Say</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', minWidth: 250, maxWidth: 350 }}>
-              <div style={{ fontWeight: 500, marginBottom: 8 }}>&quot;Great service and fast delivery! My dog loves the new bed.&quot;</div>
-              <div style={{ color: '#4fd1c5', fontWeight: 600 }}>- Priya S.</div>
+                    {/* Features/Icons Section */}
+                    <section style={{ width: '100vw', background: '#f8fafc', padding: '2rem 0 1.5rem 0', display: 'flex', justifyContent: 'center' }}>
+                      <div style={{ display: 'flex', flexDirection: 'row', gap: '3vw', justifyContent: 'center', alignItems: 'center', width: '100%', maxWidth: 900 }}>
+                        {features.map((f, i) => (
+                          <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1, minWidth: 90 }}>
+                            {f.icon}
+                            <span style={{ marginTop: 10, color: '#319795', fontWeight: 600, fontSize: 15, textAlign: 'center' }}>{f.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  </main>
+                } />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
+              </Routes>
             </div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', minWidth: 250, maxWidth: 350 }}>
-              <div style={{ fontWeight: 500, marginBottom: 8 }}>&quot;The vet consultation was so helpful. Highly recommend!&quot;</div>
-              <div style={{ color: '#4fd1c5', fontWeight: 600 }}>- Rahul M.</div>
-            </div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', minWidth: 250, maxWidth: 350 }}>
-              <div style={{ fontWeight: 500, marginBottom: 8 }}>&quot;Best place for pet products. Quality is top-notch.&quot;</div>
-              <div style={{ color: '#4fd1c5', fontWeight: 600 }}>- Anjali T.</div>
-            </div>
+            <footer style={{ background: '#222', color: '#fff', textAlign: 'center', padding: '1.2rem 0', marginTop: 'auto', width: '100vw', height: 90 }}>
+              <div style={{ marginBottom: '0.5rem' }}>
+                <a href="#tc" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Terms &amp; Conditions</a>
+                <a href="#privacy" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Privacy Policy</a>
+                <a href="#contact" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Contact Us</a>
+              </div>
+              <div style={{ fontSize: '1rem', color: '#bbb' }}>
+                &copy; {new Date().getFullYear()} PetSphere. All rights reserved.
+              </div>
+            </footer>
           </div>
-        </section>
-
-        {/* Newsletter Signup */}
-        <section style={{ padding: '2rem 1rem', maxWidth: 600, margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.3rem', color: '#333', marginBottom: '1rem', textAlign: 'center' }}>Get Pet Care Tips & Offers</h2>
-          <form style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <input type="email" placeholder="Your email" style={{ padding: '0.7rem 1rem', borderRadius: 6, border: '1px solid #ccc', fontSize: '1rem', width: 220 }} />
-            <button type="submit" style={{ background: '#4fd1c5', color: '#fff', border: 'none', borderRadius: 6, padding: '0.7rem 1.5rem', fontSize: '1rem', cursor: 'pointer' }}>Subscribe</button>
-          </form>
-        </section>
-
-        {/* Blog/Advice */}
-        <section style={{ padding: '2rem 1rem', maxWidth: 1100, margin: '0 auto' }}>
-          <h2 style={{ fontSize: '1.7rem', color: '#333', marginBottom: '1.2rem', textAlign: 'center' }}>Latest Pet Care Tips</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', minWidth: 250, maxWidth: 350 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>How to Choose the Right Food for Your Pet</div>
-              <div style={{ color: '#666', fontSize: '0.95rem' }}>Tips for selecting healthy and nutritious food for your furry friend.</div>
-            </div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', minWidth: 250, maxWidth: 350 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>5 Fun Activities to Keep Your Cat Active</div>
-              <div style={{ color: '#666', fontSize: '0.95rem' }}>Simple games and toys to keep your cat happy and healthy.</div>
-            </div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '1.2rem 2rem', minWidth: 250, maxWidth: 350 }}>
-              <div style={{ fontWeight: 600, marginBottom: 8 }}>Grooming Tips for Dogs</div>
-              <div style={{ color: '#666', fontSize: '0.95rem' }}>How to keep your dog clean, shiny, and comfortable.</div>
-            </div>
-          </div>
-        </section>
-
-        {/* Brand Partners & Trust Badges */}
-        <section style={{ padding: '2rem 1rem', maxWidth: 1100, margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '1.3rem', color: '#333', marginBottom: '1rem' }}>Our Trusted Partners</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Purina_logo.png" alt="Purina" style={{ height: 40, background: '#fff', borderRadius: 6, padding: 4 }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2b/Pedigree_logo.png" alt="Pedigree" style={{ height: 40, background: '#fff', borderRadius: 6, padding: 4 }} />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2d/Whiskas_logo.png" alt="Whiskas" style={{ height: 40, background: '#fff', borderRadius: 6, padding: 4 }} />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '0.7rem 1.5rem', fontWeight: 500, color: '#4fd1c5', display: 'inline-block' }}>Secure Payment</div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '0.7rem 1.5rem', fontWeight: 500, color: '#4fd1c5', display: 'inline-block' }}>Satisfaction Guarantee</div>
-            <div style={{ background: '#fff', borderRadius: 10, padding: '0.7rem 1.5rem', fontWeight: 500, color: '#4fd1c5', display: 'inline-block' }}>Fast Shipping</div>
-          </div>
-        </section>
-      </main>
-      <footer style={{ background: '#222', color: '#fff', textAlign: 'center', padding: '1.2rem 0', marginTop: 0 }}>
-        <div style={{ marginBottom: '0.5rem' }}>
-          <a href="#tc" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Terms &amp; Conditions</a>
-          <a href="#privacy" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Privacy Policy</a>
-          <a href="#contact" style={{ color: '#4fd1c5', margin: '0 1rem', textDecoration: 'none' }}>Contact Us</a>
-        </div>
-        <div style={{ fontSize: '1rem', color: '#bbb' }}>
-          &copy; {new Date().getFullYear()} PetSphere. All rights reserved.
-        </div>
-      </footer>
-    </>
-  );
+        </Router>
+      </CartWishlistProvider>
+    );
 }
 
-export default App
+export default App;
